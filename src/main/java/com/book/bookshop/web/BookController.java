@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("/home")
+@RequestMapping("/book")
 public class BookController {
 
     @Autowired
@@ -31,7 +31,7 @@ public class BookController {
         QueryWrapper<Book> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("category",category);
         IPage<Book> iPage = bookService.page(new Page<>(page,4),queryWrapper);
-        model.addAttribute("booklist",iPage.getRecords());
+        model.addAttribute("bookList",iPage.getRecords());
         model.addAttribute("pre",iPage.getCurrent()-1);
         model.addAttribute("next",iPage.getCurrent()+1);
         model.addAttribute("cur",iPage.getCurrent());
@@ -39,5 +39,39 @@ public class BookController {
         model.addAttribute("category",category);
         return "bookData";
     }
+    /**
+     * 图书列表页
+     */
+    @RequestMapping("/bookList")
+    public String bookList(String category,Model model){
+        model.addAttribute("category",category);
+        return "books_list";
+    }
 
+    /*
+    获取图书列表数据
+     */
+    @RequestMapping("/getBookListData")
+    public String getBookListData(String category,Integer page,Model model,Integer pageSize){
+        QueryWrapper<Book> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("category",category);
+        IPage<Book> iPage = bookService.page(new Page<Book>(page,pageSize),queryWrapper);
+        model.addAttribute("bookList",iPage.getRecords());
+        model.addAttribute("pre",iPage.getCurrent()-1);
+        model.addAttribute("next",iPage.getCurrent()+1);
+        model.addAttribute("cur",iPage.getCurrent());
+        model.addAttribute("pages",iPage.getPages());
+        model.addAttribute("category",category);
+        model.addAttribute("pageSize",pageSize);
+        return "booksListData";
+    }
+    /**
+     * 图书详情
+     */
+    @RequestMapping("/detail")
+    public String detail(Integer id,Model model){
+        Book book = bookService.getById(id);
+        model.addAttribute("book",book);
+        return "details";
+    }
 }

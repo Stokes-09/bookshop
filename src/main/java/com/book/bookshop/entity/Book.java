@@ -7,11 +7,13 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.book.bookshop.entity.enums.Category;
 import com.book.bookshop.entity.enums.Suit;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
 @Data
 @TableName(value = "bs_book")
+@EqualsAndHashCode(callSuper = false)
 public class Book extends Model<Book> {
     @TableId(type = IdType.AUTO)
     private Integer id;
